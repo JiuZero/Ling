@@ -48,7 +48,7 @@ jobs:
       - name: Install Linux dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y patchelf gcc ccache qmake
+          sudo apt-get install -y patchelf gcc ccache qtbase5-dev
         if: runner.os == 'Linux'
         
       - name: Install macOS dependencies
