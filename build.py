@@ -63,7 +63,7 @@ def build():
     base_args = [
         '-F',
         '-w', 
-        '--icon=doc/ling.png',
+        '--icon=doc/logo.png',
         '--distpath=ling',
         '--add-data=doc/logo.png:doc',
         '--add-data=dark.qss:.',
