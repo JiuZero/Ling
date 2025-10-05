@@ -14,7 +14,7 @@ on:
         default: false
 
 env:
-  PYTHON_VERSION: "3.11"
+  PYTHON_VERSION: "3.9"
   BUILD_SCRIPT: "build.py"
 
 jobs:  
