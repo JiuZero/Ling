@@ -28,3 +28,4 @@ data/z0scan.db
 certs/baseproxy_*
 output/*_*_*
 .codebuddy
+ling_settings.json
