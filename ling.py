@@ -30,13 +30,58 @@ PLUGIN_INFO_PATTERNS = {
 JSON_REPORT_PATH_PATTERN = re.compile(r'JSON Report Path: (.*\.json)')
 
 INFO = """
-<h2 style="text-align: center;">z0scan-ling 漏洞扫描工具</h2>
-<p style="text-align: center;">版本: 0.0.1</p>
-<hr>
-<p>z0scan 是一款功能强大的网络漏洞扫描工具，旨在帮助安全测试人员发现和评估网络应用中的安全漏洞。</p>
-<p>ling 则作为z0的GUI实现，具有直观、便捷等特点。</p>
-<hr>
-<p style="text-align: center;">© 2025 JiuZero</p>
+<div style="max-width: 920px; margin: 0 auto; font-size: 14px; line-height: 1.6; color: #333;">
+  <h2 style="text-align: center; margin: 6px 0 2px;">Ling · z0scan 图形化界面</h2>
+  <p style="text-align: center; margin: 0; color: #7a7a7a;">以更直观、更高效的方式驱动 z0scan 的主动/被动扫描与报告分析</p>
+
+  <div style="text-align:center; margin: 12px 0 2px;">
+    <a href="https://github.com/JiuZero/Ling" target="_blank">GitHub</a> ·
+    <a href="https://jiuzero.github.io/tags/z0scan/" target="_blank">z0scan 文档</a> ·
+    <a href="https://github.com/JiuZero/z0scan/releases" target="_blank">z0scan 发行版</a> ·
+    <a href="https://github.com/JiuZero/z0scan/blob/master/doc/CHANGELOG.MD" target="_blank">z0scan 更新日志</a> ·
+    <a href="https://star-history.com/#JiuZero/Ling&Date" target="_blank">Star 趋势</a>
+  </div>
+
+  <hr style="margin: 12px 0 10px; border:none; border-top: 1px solid #e7e7e7;">
+
+  <h3 style="margin: 8px 0 6px;">为什么选择 Ling（创新性优势）</h3>
+  <ul style="margin: 4px 0 8px 20px;">
+    <li><b>启动前置校验</b>：启动页强制设置 z0 路径，避免“先进入再失败”的糟糕体验</li>
+    <li><b>工作目录绑定</b>：扫描前自动切换到 z0 工作目录，确保相对路径、插件与资源稳定解析</li>
+    <li><b>插件即视化</b>：按 PerPage/PerDir/PerDomain/PerHost 分栏展示，风险着色与搜索过滤更直观</li>
+    <li><b>报告智能捕获</b>：实时识别 “JSON Report Path: ...”，一键载入并结构化展示详情</li>
+    <li><b>配置直连</b>：直接编辑 z0 工作目录的 config/config.py，所见即所得、免切换上下文</li>
+    <li><b>主题与深色 QSS</b>：内置 Light/Dark，深色自动加载 dark.qss，保证一致的观感</li>
+    <li><b>稳定交付链</b>：本地/CI 支持 UPX 压缩、ARM64 轮子预装，生成更小体积的可执行产物</li>
+  </ul>
+
+  <h3 style="margin: 10px 0 6px;">核心能力</h3>
+  <ul style="margin: 4px 0 8px 20px;">
+    <li>主动扫描：单 URL 或批量文件</li>
+    <li>被动扫描：代理（默认 127.0.0.1:5920）接入 Burp/Yakit 等</li>
+    <li>参数：风险/级别/线程/代理/超时/插件使能/禁用 等</li>
+    <li>报告：HTML/JSON 导出，列表与详情联动查看</li>
+  </ul>
+
+  <h3 style="margin: 10px 0 6px;">使用提示</h3>
+  <ol style="margin: 4px 0 8px 20px;">
+    <li>首次启动需设置 z0 路径（z0.exe 或 z0.py），通过后进入主界面</li>
+    <li>插件与配置来自 <code>z0 工作目录</code>（<code>scanners/</code> 与 <code>config/</code>），保持目录结构一致</li>
+    <li>扫描命令在 z0 工作目录下执行，避免因相对路径导致的插件/资源加载失败</li>
+  </ol>
+
+  <div style="margin: 12px 0; padding: 10px 12px; background: #f7f7f9; border: 1px solid #eee; border-radius: 8px;">
+    <b>小贴士</b>：如果你从源码运行 z0.py，请确保 Python 版本与依赖满足要求；Ling 会根据后缀自动使用 python/python3 执行。
+  </div>
+
+  <h3 style="margin: 10px 0 6px;">联系</h3>
+  <p style="margin: 4px 0 8px 0;">
+    QQ：1703417187 · QQ 交流群：1058256508 · 微信：JiuZer1 · 公众号：90Safe
+  </p>
+
+  <hr style="margin: 12px 0 8px; border:none; border-top: 1px solid #e7e7e7;">
+  <p style="text-align:center; color:#888; margin: 4px 0;">© 2025 JiuZero · Ling vGUI for z0scan</p>
+</div>
 """
 
 def get_resource_path(relative_path):
@@ -419,6 +464,7 @@ class Z0ScanGUI(FluentWindow):
         super().__init__()
         self.setWindowIcon(QIcon(get_resource_path('doc/logo.png')))
         self.scan_thread = None
+        self.version = "v0.2"
         self.vulnerabilities = []  # 存储发现的漏洞
         self.plugin_info_cache = {}  # 插件信息缓存
         self.selected_risks = [0, 1, 2, 3]  # 默认选择所有风险等级
@@ -439,7 +485,7 @@ class Z0ScanGUI(FluentWindow):
         
     def init_ui(self):
         # 设置窗口基本属性
-        self.setWindowTitle("Ling - Z0GUI漏洞扫描工具")
+        self.setWindowTitle(f"Ling - Z0GUI漏洞扫描工具 {self.version}")
         self.setGeometry(100, 100, 1200, 800)
         self.setMinimumSize(1000, 600)
         # 设置字体

@@ -32,6 +32,23 @@ def setup_build_directory():
         except Exception as _e:
             print(f":: COPY ling_settings.json WARN: {_e}")
         
+        # Try UPX compression of built artifacts in 'ling' directory (optional)
+        try:
+            upx_path = which('upx')
+            if upx_path:
+                print(f":: UPX FOUND : {upx_path}")
+                for file in build_dir.iterdir():
+                    if file.is_file() and file.name != 'ling_settings.json':
+                        try:
+                            print(f":: UPX COMPRESS : {file}")
+                            subprocess.run([upx_path, '--best', '--lzma', str(file)], check=False)
+                        except Exception as __e:
+                            print(f":: UPX WARN : {file} -> {__e}")
+            else:
+                print(":: UPX SKIP : upx not found")
+        except Exception as __e:
+            print(f":: UPX SKIP : {__e}")
+        
     except Exception as e:
         print(f"\n:: RESOURCE COPY ERROR: {str(e)}")
         if not os.getenv('CI'):  # CI环境中忽略资源错误
