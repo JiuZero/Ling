@@ -48,23 +48,8 @@ jobs:
       - name: Install Linux dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y gcc
+          sudo apt-get install -y qt5-default
         if: runner.os == 'Linux'
-
-      - name: Install Qt toolchain (Linux ARM64)
-        if: matrix.arch == 'arm64' && runner.os == 'Linux'
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y qt5-qmake
-
-      - name: Prefer binary wheels
-        run: echo "PIP_PREFER_BINARY=1" >> $GITHUB_ENV
-    
-      - name: Prepare pip and preinstall PyQt wheels (Linux ARM64)
-        if: matrix.arch == 'arm64' && runner.os == 'Linux'
-        run: |
-          python -m pip install -U pip wheel setuptools
-          python -m pip install "sip==6.7.12" "PyQt5-sip==12.13.0" "PyQt5==5.15.10"
 
       - name: Install build tools
         run: |
