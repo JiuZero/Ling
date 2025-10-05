@@ -26,9 +26,6 @@ jobs:
           - os: ubuntu-latest
             arch: x86_64
             artifact_suffix: linux-x86_64
-          - os: ubuntu-24.04-arm
-            arch: arm64
-            artifact_suffix: linux-arm64
           - os: windows-latest
             arch: amd64
             artifact_suffix: windows-amd64
@@ -115,11 +112,9 @@ jobs:
             **支持平台:**
             - 💻 Windows (x86_64): `ling-windows-amd64.zip`
             - 🐧 Linux (x86_64): `ling-linux-x86_64.zip`
-            - 🐧 Linux (ARM64): `ling-linux-arm64.zip`
             - 🍎 macOS (ARM64): `ling-darwin-arm64.zip`
           files: |
             artifacts/ling-linux-x86_64.zip
-            artifacts/ling-linux-arm64.zip
             artifacts/ling-windows-amd64.zip
             artifacts/ling-darwin-arm64.zip
           draft: false
