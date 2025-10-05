@@ -1,0 +1,116 @@
+name: Build up
+
+on:
+  workflow_dispatch:  # 手动触发
+    inputs:
+      version:
+        description: 'Release version (e.g. v0.1)'
+        required: true
+        default: 'v'
+      is_prerelease:
+        description: 'Is this a pre-release?'
+        type: boolean
+        required: false
+        default: false
+
+env:
+  PYTHON_VERSION: "3.11"
+  BUILD_SCRIPT: "build.py"
+
+jobs:  
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-latest
+            arch: x86_64
+            artifact_suffix: linux-x86_64
+          - os: ubuntu-24.04-arm64
+            arch: arm64
+            artifact_suffix: linux-arm64
+          - os: windows-latest
+            arch: amd64
+            artifact_suffix: windows-amd64
+          - os: macos-latest
+            arch: arm64
+            artifact_suffix: darwin-arm64
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python ${{ env.PYTHON_VERSION }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Install Linux dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y patchelf gcc ccache
+        if: runner.os == 'Linux'
+        
+      - name: Install macOS dependencies
+        run: |
+          brew install ccache
+        if: runner.os == 'macOS'
+    
+      - name: Install Nuitka and build tools
+        run: |
+          python -m pip install --upgrade pip
+          pip install nuitka zstandard imageio pyinstaller
+          pip install -r requirements.txt
+          pip install -r requirements-ling.txt
+    
+
+      - name: Build with Nuitka
+        env:
+          TARGET_ARCH: ${{ matrix.arch }}
+        run: |
+          python ${{ env.BUILD_SCRIPT }}
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ling-${{ matrix.artifact_suffix }}.zip
+          path: ling-${{ matrix.artifact_suffix }}.zip
+          if-no-files-found: error
+
+  create-release:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+          pattern: ling-*.zip
+          merge-multiple: true
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.event.inputs.version }}
+          overwrite: true
+          release_name: Release ${{ github.event.inputs.version }}
+          body: |-
+            
+            **构建信息:**
+            - 提交哈希: ${{ github.sha }}
+            - 分支: ${{ github.ref_name }}
+      
+            **支持平台:**
+            - 💻 Windows (x86_64): `ling-windows-amd64.zip`
+            - 🐧 Linux (x86_64): `ling-linux-x86_64.zip`
+            - 🐧 Linux (ARM64): `ling-linux-arm64.zip`
+            - 🍎 macOS (ARM64): `ling-darwin-arm64.zip`
+          files: |
+            artifacts/ling-linux-x86_64.zip
+            artifacts/ling-linux-arm64.zip
+            artifacts/ling-windows-amd64.zip
+            artifacts/ling-darwin-arm64.zip
+          draft: false
+          prerelease: ${{ github.event.inputs.is_prerelease }}
