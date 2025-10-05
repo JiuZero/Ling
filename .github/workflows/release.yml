@@ -48,7 +48,7 @@ jobs:
       - name: Install Linux dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y qt5-default
+          sudo apt-get install -y qtbase5-dev qt5-qmake
         if: runner.os == 'Linux'
 
       - name: Install build tools
