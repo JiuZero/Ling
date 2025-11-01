@@ -15,16 +15,49 @@
 
 ---
 
+## 🔗 联系
+
+<table>
+  <tr>
+    <td width="25%" valign="top">
+      <h3>公众号</h3>
+      <ul>
+        <li><b>90Safe</b></li>
+      </ul>
+    </td>
+    <td width="25%" valign="top">
+      <h3>微信</h3>
+      <ul>
+        <li><b>JiuZer1</b></li>
+      </ul>
+    </td>
+    <td width="25%" valign="top">
+      <h3>QQ</h3>
+      <ul>
+        <li><b>1703417187</b></li>
+      </ul>
+    </td>
+    <td width="25%" valign="top">
+      <h3>QQ交流群</h3>
+      <ul>
+        <li><b>1058256508</b></li>
+      </ul>
+    </td>
+  </tr>
+</table>
+
+---
+
 ## ✨ 项目简介
 
-Ling 是由 z0scan 而衍生的基于 PyQt5 与 QFluentWidgets 构建的图形化界面（GUI）
+Ling 是为 z0scan 而衍生的基于 PyQt5 与 QFluentWidgets 构建的图形化界面（GUI）
 
 它提供直观易用的界面来驱动 z0scan 执行主动/被动扫描、插件启停、结果筛选与报告导出，适合希望以可视化方式快速开展 Web 安全测试的用户。
 
-- 运行核心：调用 z0scan（z0 或 z0.exe、或 z0.py）
-- UI 组件：PyQt5 + QFluentWidgets（支持 Fluent 风格）
-- 主题支持：Light/Dark,深色主题附带 dark.qss
-- 报告支持：解析 z0 输出中的 JSON Report Path 并载入结果，支持导出 HTML/JSON
+- 运行核心：通过命令行调用 z0scan
+- UI 组件：PyQt5 + QFluentWidgets
+- 主题支持：Light/Dark
+- 报告支持：解析 z0 JSON报告并载入结果
 
 > [!WARNING]
 > Ling 不包含 z0scan 核心, 需本地存在可用的 z0 可执行文件或脚本。
@@ -35,7 +68,7 @@ Ling 是由 z0scan 而衍生的基于 PyQt5 与 QFluentWidgets 构建的图形�
 
 - 可视化操作
   - 主动扫描：输入单个 URL、或批量 URL 文件
-  - 被动扫描：对接代理流量（默认 127.0.0.1:5920）
+  - 被动扫描：对接代理流量
   - 扫描参数：线程、级别、风险、超时、代理、仅加载/禁用插件等
 - 插件管理
   - 自动读取 scanners 目录下 PerPage/PerDir/PerDomain/PerHost 四类插件
@@ -44,7 +77,7 @@ Ling 是由 z0scan 而衍生的基于 PyQt5 与 QFluentWidgets 构建的图形�
   - 风险、类型筛选与详情查看（验证步骤/细节树）
   - 保存 JSON 结果、导出 HTML 报告
 - 主题与配置
-  - Light/Dark 切换（Dark 下自动加载 dark.qss）
+  - Light/Dark 切换
   - 设置页可指定 z0 可执行路径、在线编辑 z0 的 config/config.py
 
 ---
@@ -65,55 +98,18 @@ python3 ling.py
 ## 🚀 快速开始
 
 1) 准备 z0 可执行文件或脚本
-- 推荐将 z0.exe（Windows）或 z0（Unix），或 z0.py 放在运行 Ling 的同一目录
-- 或在 Ling 设置页手动指定 z0 路径（支持 .exe/.py）
+- 推荐将 Ling 放至 z0scan 工作目录下
+- 或在 Ling 设置页手动指定 z0 路径
 
 2) 启动 GUI
 ```bash
 python ling.py
 ```
 
-3) 基本用法
-- 主动扫描：选择“主动扫描”，在“目标URL/文件”中填入：
-  - 单 URL 示例: https://example.com/?id=1
-  - 文件示例: urls.txt（每行一个 URL）
-- 被动扫描：选择“被动扫描”，设置代理监听地址，默认 127.0.0.1:5920
-- 扫描参数：
-  - 级别: 0/1/2/3
-  - 风险: 支持多选（0,1,2,3）
-  - 线程: 默认 10
-  - 代理 -p、超时 --timeout、控制台端口 -c、插件线程 -pt、仅加载 --enable、禁用 --disable 等
-- 报告解析：
-  - Ling 会监听 z0 输出中形如“JSON Report Path: xxx.json”的行，并自动加载该 JSON 报告
-- 导出：
-  - “扫描结果”页可保存 JSON 或导出 HTML 报告
-
----
-
-## 🧩 插件视图
-
-Ling 会扫描项目 scanners 目录下的四类插件（若存在）：
-- PerPage
-- PerDir
-- PerDomain
-- PerHost
-
-支持能力：
-- 列表勾选启用/禁用
-- 按风险（0/1/2/3）与关键字过滤
-- 点击项查看插件元信息：name/desc/version/risk/path
-
-说明：
-- 插件信息通过正则从脚本中提取 name/desc/version/risk
-- 风险颜色：3 红、2 橙、1 黄、0 绿
-
-提示：本仓库未附带 scanners 目录与插件，请将其与 z0scan 保持对应结构以展示。
-
 ---
 
 ## 🖼️ 截图
 
-请将你的截图放置于 doc/ 目录，并在此更新引用路径：
 - 可视化主界面
 
 ![gui](doc/example1.png)
@@ -137,39 +133,6 @@ Ling 会扫描项目 scanners 目录下的四类插件（若存在）：
 - 扫描完成未载入结果？
   - 确保 z0 输出包含 “JSON Report Path: xxx.json”，并且该文件能被读取
   - 确保 z0 的扫描已结束（被动扫描需手动结束）
-
----
-
-## 🔗 联系
-
-<table>
-  <tr>
-    <td width="25%" valign="top">
-      <h3>公众号</h3>
-      <ul>
-        <li><b>90Safe</b> - 安全资讯</li>
-      </ul>
-    </td>
-    <td width="25%" valign="top">
-      <h3>微信</h3>
-      <ul>
-        <li><b>JiuZer1</b> - 不怎么看…</li>
-      </ul>
-    </td>
-    <td width="25%" valign="top">
-      <h3>QQ</h3>
-      <ul>
-        <li><b>1703417187</b> - 偶尔在线</li>
-      </ul>
-    </td>
-    <td width="25%" valign="top">
-      <h3>QQ交流群</h3>
-      <ul>
-        <li><b>1058256508</b> - 问题咨询</li>
-      </ul>
-    </td>
-  </tr>
-</table>
 
 ---
 

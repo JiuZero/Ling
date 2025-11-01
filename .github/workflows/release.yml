@@ -12,6 +12,9 @@ on:
         type: boolean
         required: false
         default: false
+  push:
+    tags:
+      - 'v*'  # 以 v 开头的 tag 自动触发
 
 env:
   PYTHON_VERSION: "3.9"
@@ -96,6 +99,22 @@ jobs:
           path: artifacts
           pattern: ling-*.zip
           merge-multiple: true
+
+      - name: Determine release parameters
+        id: get_params
+        run: |
+          if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
+            echo "tag=${{ github.event.inputs.version }}" >> $GITHUB_OUTPUT
+            echo "prerelease=${{ github.event.inputs.is_prerelease }}" >> $GITHUB_OUTPUT
+          else
+            echo "tag=${{ github.ref_name }}" >> $GITHUB_OUTPUT
+            # 自动判断是否为预发布版本
+            if [[ "${{ github.ref_name }}" =~ -(beta|alpha|rc|pre) ]]; then
+              echo "prerelease=true" >> $GITHUB_OUTPUT
+            else
+              echo "prerelease=false" >> $GITHUB_OUTPUT
+            fi
+          fi
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2

@@ -553,19 +553,19 @@ class Z0ScanGUI(FluentWindow):
         # 目标输入（主动扫描）
         self.target_input = LineEdit()
         self.target_input.setPlaceholderText("例如: https://example.com 或从文件导入: urls.txt")
-        config_layout.addRow("目标URL/文件:", self.target_input)
+        config_layout.addRow("目标URL/文件(--url/--file):", self.target_input)
         
         # 代理设置（被动扫描）
         self.proxy_input = LineEdit()
         self.proxy_input.setText("127.0.0.1:5920")
         self.proxy_input.setPlaceholderText("例如: 127.0.0.1:5920")
         self.proxy_input.setEnabled(False)  # 默认隐藏，被动模式下显示
-        config_layout.addRow("被动服务地址(-s):", self.proxy_input)
+        config_layout.addRow("被动服务地址(--server-addr):", self.proxy_input)
         
         # 扫描级别选择
         self.level_combo = ComboBox()
         self.level_combo.addItems(["0 (静态分析)", "1 (基础)", "2 (中等)", "3 (深入)"])
-        config_layout.addRow("扫描级别:", self.level_combo)
+        config_layout.addRow("扫描级别(--level):", self.level_combo)
         
         # 风险等级选择
         risk_layout = QHBoxLayout()
@@ -576,17 +576,17 @@ class Z0ScanGUI(FluentWindow):
         self.risk_button.clicked.connect(self.open_risk_dialog)
         risk_layout.addWidget(self.risk_display)
         risk_layout.addWidget(self.risk_button)
-        config_layout.addRow("风险等级:", risk_layout)
+        config_layout.addRow("风险等级(--risk):", risk_layout)
         
         # 线程数设置
         self.threads_input = LineEdit()
         self.threads_input.setText("10")
-        config_layout.addRow("线程数:", self.threads_input)
+        config_layout.addRow("线程数(--threads):", self.threads_input)
         
         # 请求代理(-p)
         self.request_proxy_input = LineEdit()
         self.request_proxy_input.setPlaceholderText("http://127.0.0.1:8080 或 proxy.txt")
-        config_layout.addRow("请求代理(-p):", self.request_proxy_input)
+        config_layout.addRow("请求代理(--proxy):", self.request_proxy_input)
 
         # 超时(--timeout)
         self.timeout_input = LineEdit()
@@ -596,12 +596,12 @@ class Z0ScanGUI(FluentWindow):
         # 控制台端口(-c)
         self.console_port_input = LineEdit()
         self.console_port_input.setPlaceholderText("留空使用默认")
-        config_layout.addRow("控制台端口(-c):", self.console_port_input)
+        config_layout.addRow("控制台端口(--console-port):", self.console_port_input)
 
         # 插件线程(-pt)
         self.plugin_threads_input = LineEdit()
         self.plugin_threads_input.setPlaceholderText("例如: 5")
-        config_layout.addRow("插件线程(-pt):", self.plugin_threads_input)
+        config_layout.addRow("插件线程(-plugin-threads):", self.plugin_threads_input)
 
         # 输出选项
         self.html_check = CheckBox("生成HTML报告(--html)")
@@ -610,19 +610,19 @@ class Z0ScanGUI(FluentWindow):
         config_layout.addRow("JSON路径(--json):", self.json_path_input)
 
         # 连接/Redis
-        self.reverse_client_check = CheckBox("连接反连服务器(-R)")
+        self.reverse_client_check = CheckBox("连接反连服务器(--reverse-client)")
         self.redis_client_input = LineEdit()
         self.redis_client_input.setPlaceholderText("password@host:port:db")
-        config_layout.addRow("Redis客户端(-Rc):", self.redis_client_input)
+        config_layout.addRow("Redis客户端(--redis-client):", self.redis_client_input)
 
         self.redis_server_input = LineEdit()
         self.redis_server_input.setPlaceholderText("password@host:port:db")
-        config_layout.addRow("Redis服务端(-Rs):", self.redis_server_input)
+        config_layout.addRow("Redis服务端(--redis-server):", self.redis_server_input)
 
         self.redis_clean_check = CheckBox("清理Redis(--redis-clean)")
 
         # 扫描Cookie
-        self.scan_cookie_check = CheckBox("扫描Cookie(-sc)")
+        self.scan_cookie_check = CheckBox("扫描Cookie(--scan-cookie)")
 
         # 仅加载插件
         self.enable_scanners_input = LineEdit()
@@ -636,23 +636,23 @@ class Z0ScanGUI(FluentWindow):
         advanced_layout = QVBoxLayout()
 
         # 左右两栏对齐
-        self.random_agent_check = CheckBox("使用随机User-Agent")
-        self.ignore_waf_check = CheckBox("忽略WAF检测")
-        self.fingerprint_check = CheckBox("忽略指纹要素")
-        self.ipv6_check = CheckBox("启用IPv6支持")
+        self.random_agent_check = CheckBox("使用随机User-Agent(--random-agent)")
+        self.ignore_waf_check = CheckBox("忽略WAF检测(--ignore-waf)")
+        self.fingerprint_check = CheckBox("忽略指纹要素(--ignore-fingerprint):")
+        self.ipv6_check = CheckBox("启用IPv6支持(--ipv6)")
 
         cols_layout = QHBoxLayout()
         left_form = QFormLayout()
         right_form = QFormLayout()
 
-        left_form.addRow("随机User-Agent:", self.random_agent_check)
-        left_form.addRow("忽略WAF检测:", self.ignore_waf_check)
-        left_form.addRow("HTML输出:", self.html_check)
-        left_form.addRow("Cookie扫描(-sc):", self.scan_cookie_check)
+        left_form.addRow("", self.random_agent_check)
+        left_form.addRow("", self.ignore_waf_check)
+        left_form.addRow("", self.html_check)
+        left_form.addRow("", self.scan_cookie_check)
 
-        right_form.addRow("忽略指纹要素:", self.fingerprint_check)
-        right_form.addRow("启用IPv6支持:", self.ipv6_check)
-        right_form.addRow("Redis清理(--redis-clean):", self.redis_clean_check)
+        right_form.addRow("", self.fingerprint_check)
+        right_form.addRow("", self.ipv6_check)
+        right_form.addRow("", self.redis_clean_check)
 
         cols_layout.addLayout(left_form)
         cols_layout.addLayout(right_form)
@@ -1093,15 +1093,15 @@ class Z0ScanGUI(FluentWindow):
                 self.scan_output.append("请输入目标URL或文件")
                 return
             if target.split(".")[-1] == "txt":
-                command += f" -f {target}"
+                command += f" --file {target}"
             else:
-                command += f" -u {target}"
+                command += f" --url {target}"
         else:
             proxy = self.proxy_input.text().strip()
             if not proxy:
                 self.scan_output.append("请输入代理端口")
                 return
-            command += f" -s {proxy}"
+            command += f" --server-addr {proxy}"
         
         # 添加扫描级别
         level = self.level_combo.currentText()[0]
@@ -1134,7 +1134,7 @@ class Z0ScanGUI(FluentWindow):
         # 请求代理(-p)
         p = self.request_proxy_input.text().strip()
         if p:
-            command += f" -p {p}"
+            command += f" --proxy {p}"
 
         # 超时(--timeout)
         timeout = self.timeout_input.text().strip()
@@ -1144,12 +1144,12 @@ class Z0ScanGUI(FluentWindow):
         # 控制台端口(-c)
         cport = self.console_port_input.text().strip()
         if cport:
-            command += f" -c {cport}"
+            command += f" --console-port {cport}"
 
         # 插件线程(-pt)
         pt = self.plugin_threads_input.text().strip()
         if pt.isdigit():
-            command += f" -pt {pt}"
+            command += f" --plugin-threads {pt}"
 
         # 输出(--html/--json)
         if self.html_check.isChecked():
@@ -1160,17 +1160,17 @@ class Z0ScanGUI(FluentWindow):
 
         # 扫描Cookie(-sc)
         if self.scan_cookie_check.isChecked():
-            command += " -sc"
+            command += " --scan-cookie"
 
         # 连接/Redis
         if self.reverse_client_check.isChecked():
-            command += " -R"
+            command += " --reverse-client"
         rc = self.redis_client_input.text().strip()
         if rc:
-            command += f" -Rc {rc}"
+            command += f" --redis-client {rc}"
         rs = self.redis_server_input.text().strip()
         if rs:
-            command += f" -Rs {rs}"
+            command += f" --redis-server {rs}"
         if self.redis_clean_check.isChecked():
             command += " --redis-clean"
 
@@ -1475,7 +1475,6 @@ class Z0ScanGUI(FluentWindow):
 
         if running:
             try:
-                # 优先使用 QFluentWidgets 的 MessageBox
                 from qfluentwidgets import MessageBox
                 box = MessageBox("正在扫描", "当前有扫描正在进行，确定要停止并退出吗？", self)
                 try:
@@ -1569,7 +1568,6 @@ def ensure_ling_exe_path(parent=None):
 if __name__ == "__main__":
     app = QApplication(sys.argv)
 
-    # 创建并展示启动页（SplashScreen），包含不确定进度条（稳定版：先 Splash，后主窗体，延时关闭，不阻塞UI）
     try:
         icon = QIcon(get_resource_path('doc/logo.png')) if os.path.exists(get_resource_path('doc/logo.png')) else QIcon()
         splash = SplashScreen(icon)
@@ -1591,14 +1589,13 @@ if __name__ == "__main__":
         lay.setContentsMargins(24, 24, 24, 24)
         lay.addStretch(1)
         lay.addWidget(bar)
-        splash.resize(520, 320)
+        splash.resize(1000, 600)
         splash.show()
 
         # 在进入主界面前确保已设置 z0 路径
         if not ensure_ling_exe_path(splash):
             sys.exit(0)
 
-        # 创建主窗体（在 Splash 显示后创建）
         window = Z0ScanGUI()
         # 将 Splash 的大小与位置同步为与主窗口一致
         try:
@@ -1607,7 +1604,6 @@ if __name__ == "__main__":
         except Exception:
             pass
 
-        # 3 秒后关闭 Splash 并显示主窗体（避免 sleep 阻塞）
         def _finish():
             try:
                 splash.close()
@@ -1617,19 +1613,16 @@ if __name__ == "__main__":
 
         QTimer.singleShot(3000, _finish)
     except Exception:
-        # 回退：无 Splash 分支；先确保已设置 z0 路径，再进入主窗体
         if not ensure_ling_exe_path():
             sys.exit(0)
         window = Z0ScanGUI()
         window.show()
 
-    # 显示欢迎 InfoBar，2 秒后自动消失（Toast 替代）
     try:
         import random
         phrases = [
             "解铃还须系铃人",
             "道路千万条，安全第一条",
-            "安全即责任，细节见真章",
             "愿有人问粥可温，愿有人与共黄昏",
             "人生苦短，我用 Ling",
             "发愤识遍天下洞，立志夺尽人间旗",
