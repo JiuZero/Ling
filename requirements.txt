@@ -1,4 +1,3 @@
 PyQt5
 sip
-pyobjc==11.1
 PyQt-Fluent-Widgets[full]
