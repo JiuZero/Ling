@@ -55,6 +55,14 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install pyinstaller
+          
+      - name: Install PyObjc (macOS)
+        if: runner.os == 'macOS'
+        run: |
+          pip install pyobjc==11.1
+
+      - name: Install Requirements
+        run: |
           pip install -r requirements.txt
 
       - name: Install UPX (Linux)
