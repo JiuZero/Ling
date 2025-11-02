@@ -1,3 +1,4 @@
 PyQt5
 sip
-PyQt-Fluent-Widgets[full]==1.9.0
+pyobjc==11.1
+PyQt-Fluent-Widgets[full]
